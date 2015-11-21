@@ -13,10 +13,11 @@ def main():
     dc = DynamoClient()
     while (True):
         tm.refresh()
+        temp = tm.get_temp()
         if (tm.has_temp()):
-            pass
-            #dc.record_temperature(tm.get_temp())
-        print(tm.get_temp())
+            if (os.uname()[0] != 'Darwin'):
+                dc.record_temperature(temp)
+        print(temp)
         time.sleep(1)
 
 if __name__ == '__main__':
