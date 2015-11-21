@@ -13,8 +13,7 @@ def main():
         tm.refresh()
         temp = tm.get_temp()
         if (tm.has_temp()):
-            if (os.uname()[0] != 'Darwin'):
-                dc.record_temperature(temp)
+            dc.record_temperature(temp)
         print(temp)
         time.sleep(1)
 
