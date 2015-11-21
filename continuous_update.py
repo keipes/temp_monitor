@@ -1,14 +1,12 @@
 import os
 import boto
 import time
+import util
 from client.temp import TempClient
 from client.dynamo import DynamoClient
 
 def main():
-    if os.uname()[0] == 'Darwin':
-        tempfile = os.path.dirname(__file__) + os.path.sep + 'dummy_tempfile'
-    else:
-        tempfile = '/sys/bus/w1/devices/28-0000071ca1ef/w1_slave'
+    tempfile = util.get_temp_file()
     tm = TempClient(tempfile)
     dc = DynamoClient()
     while (True):

@@ -2,7 +2,7 @@
 class TempClient():
     def __init__(self, tempfile):
         self.tempfile = tempfile
-        print(tempfile)
+        self.refresh()
 
     def refresh(self):
         with open(self.tempfile, 'r') as f:
