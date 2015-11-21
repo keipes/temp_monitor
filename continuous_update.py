@@ -1,8 +1,8 @@
 import os
 import boto
 import time
-from temp_monitor import TempMonitor
-from dynamo_client import DynamoClient
+from client.temp import TempClient
+from client.dynamo import DynamoClient
 
 def main():
     if os.uname()[0] == 'Darwin':

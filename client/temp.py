@@ -1,5 +1,5 @@
 
-class TempMonitor():
+class TempClient():
     def __init__(self, tempfile):
         self.tempfile = tempfile
         print(tempfile)
