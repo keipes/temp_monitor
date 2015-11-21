@@ -56,7 +56,7 @@ def main():
         if (tm.has_temp()):
             dc.record_temperature(tm.get_temp())
         print(tm.get_temp())
-        time.sleep(60)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()
