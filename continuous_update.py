@@ -9,7 +9,7 @@ def main():
         tempfile = os.path.dirname(__file__) + os.path.sep + 'dummy_tempfile'
     else:
         tempfile = '/sys/bus/w1/devices/28-0000071ca1ef/w1_slave'
-    tm = TempMonitor(tempfile)
+    tm = TempClient(tempfile)
     dc = DynamoClient()
     while (True):
         tm.refresh()
