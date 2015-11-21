@@ -1,5 +1,6 @@
 import boto
 from boto.dynamodb2.table import Table
+from boto.dynamodb2.exceptions import ItemNotFound
 import time
 import util
 import decimal
@@ -12,7 +13,7 @@ DYNAMODB_CONTEXT.traps[decimal.Rounded] = 0
 class DynamoClient():
     def __init__(self):
         self.conn = boto.dynamodb2.connect_to_region('us-west-2')
-        print(dir(self.conn))
+        print(self.conn.list_tables())
         if util.is_dev_environment():
             table = 'temp_history_dev'
         else:
@@ -27,8 +28,14 @@ class DynamoClient():
             'temperature': temp
         })
 
-    def get_latest_temperature(self):
-        self.temp_hist.query_2()
+    def get_latest_temperature(self, max_history=6000):
+        ts = DynamoClient.get_timestamp()
+        for t in xrange(ts, ts - max_history, -1):
+            print(t)
+            try:
+                return self.temp_hist.get_item(timestamp=t)
+            except ItemNotFound:
+                pass
 
     @staticmethod
     def get_timestamp():
