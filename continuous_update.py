@@ -10,12 +10,15 @@ def main():
     tm = TempClient(tempfile)
     dc = DynamoClient()
     while (True):
+        s_time = time.time()
         tm.refresh()
         temp = tm.get_temp()
         if (tm.has_temp()):
             dc.record_temperature(temp)
         print(temp)
-        time.sleep(1)
+        sleep_time = 1 - (time.time() - s_time)
+        print(sleep_time)
+        time.sleep(sleep_time)
 
 if __name__ == '__main__':
     main()
