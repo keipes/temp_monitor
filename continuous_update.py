@@ -6,6 +6,14 @@ from client.temp import TempClient
 from client.dynamo import DynamoClient
 
 def main():
+    try:
+        print('starting updates')
+        do_them_updates()
+    except Exception:
+        time.sleep(10)
+        main()
+
+def do_them_updates():
     tempfile = util.get_temp_file()
     tm = TempClient(tempfile)
     table = util.get_temp_hist_table()
