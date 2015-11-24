@@ -5,8 +5,10 @@ import threading
 import gevent
 
 class DynamoStreamClient(threading.Thread):
-    def __init__(self):
-        self.arn = 'arn:aws:dynamodb:us-west-2:630535199163:table/temp_history/stream/2015-11-21T12:12:53.316'
+    def __init__(self, queue_list, old_items, arn):
+        self.queue_list = queue_list
+        self.old_items = old_items
+        self.arn = arn
         self.queue = Queue()
         self.should_stop = False
         super(DynamoStreamClient, self).__init__()
@@ -26,9 +28,6 @@ class DynamoStreamClient(threading.Thread):
     def stop(self):
         self.should_stop = True
 
-    def get_queue(self):
-        return self.queue
-
     def iterate_shard(self, shard_iterator):
         print('iterating shard')
         while(shard_iterator and not self.should_stop):
@@ -36,13 +35,39 @@ class DynamoStreamClient(threading.Thread):
             records = records_response['Records']
             for record in records:
                 data = record['dynamodb']['NewImage']
-                ts = int(data['timestamp'].values()[0])
-                temp = float(data['temperature'].values()[0])
-                self.queue.put({'timestamp': ts, 'temperature': temp})
-                print(str(ts) + ' ' + str(temp))
+                msg = {}
+                if self.arn.find('temp_history') > -1:
+                    ts = int(data['timestamp'].values()[0])
+                    temp = float(data['temperature'].values()[0])
+                    msg['type'] = 'temp_hist'
+                    msg['timestamp'] = ts
+                    msg['temperature'] = temp
+                    print(str(ts) + ' ' + str(temp))
+                elif self.arn.find('miscellaneous') > -1:
+                    print(data)
+                    key = data.get('any_key').values()[0]
+                    if key == 'min_temp':
+                        msg['type'] = key
+                        msg['temperature'] = int(data['temp'].values()[0])
+                    elif key == 'max_temp':
+                        msg['type'] = key
+                        msg['temperature'] = int(data['temp'].values()[0])
+                    else:
+                        print('oh no!')
+                else:
+                    msg['type'] = 'unknown'
+                    msg['data'] = data
+                self.fill_queues(msg)
             if len(records) == 0:
                 gevent.sleep(1)
             shard_iterator = records_response.get('NextShardIterator')
+
+    def fill_queues(self, item):
+        self.old_items.append(item)
+        if len(self.old_items) > 1000:
+            self.old_items.pop(0)
+        for queue in self.queue_list:
+            queue.put(item)
 
     @staticmethod
     def get_start_seq(shard):

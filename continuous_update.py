@@ -8,7 +8,9 @@ from client.dynamo import DynamoClient
 def main():
     tempfile = util.get_temp_file()
     tm = TempClient(tempfile)
-    dc = DynamoClient()
+    table = util.get_temp_hist_table()
+    print(table)
+    dc = DynamoClient(table)
     while (True):
         s_time = time.time()
         tm.refresh()

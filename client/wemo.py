@@ -10,9 +10,14 @@ class WemoClient():
     def toggle(self):
         _switch_map.values()[0].toggle()
 
+    def switch_on(self):
+        _switch_map.values()[0].on()
+
+    def switch_off(self):
+        _switch_map.values()[0].off()
+
 _switch_map = {}
 def _on_switch(switch):
-    print(switch.explain())
     _switch_map[switch.serialnumber] = switch
 
 def _on_motion(motion):
@@ -20,5 +25,5 @@ def _on_motion(motion):
 
 if __name__ == '__main__':
     wc = WemoClient()
-    wc.toggle()
-
+    wc.switch_on()
+    wc.switch_off()
