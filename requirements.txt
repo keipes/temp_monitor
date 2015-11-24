@@ -15,7 +15,7 @@ itsdangerous==0.24
 Jinja2==2.8
 jmespath==0.9.0
 MarkupSafe==0.23
-ouimeaux==0.7.9
+ouimeaux==0.7.9-r0
 pysignals==0.1.2
 python-dateutil==2.4.2
 pytz==2015.7
