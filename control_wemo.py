@@ -6,6 +6,14 @@ import util
 import Queue
 
 def main():
+    try:
+        print('controlling wemo')
+        control_wemo()
+    except Exception:
+        time.sleep(10)
+        main()
+
+def control_wemo():
   wc = WemoClient()
   dc = DynamoClient('miscellaneous')
   queue = Queue.Queue()
@@ -25,10 +33,6 @@ def main():
           wc.switch_on()
   finally:
     dsc.stop()
-
-
-
-
 
 if __name__ == '__main__':
     main()
