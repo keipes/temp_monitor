@@ -47,7 +47,6 @@ class DynamoClient():
     def get_latest_temperature(self, max_history=6000):
         ts = DynamoClient.get_timestamp()
         for t in xrange(ts, ts - max_history, -1):
-            print(t)
             try:
                 return self.table.get_item(timestamp=t)
             except ItemNotFound:
