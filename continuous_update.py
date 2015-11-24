@@ -25,6 +25,7 @@ def do_them_updates():
         if (tm.has_temp()):
             dc.record_temperature(temp)
         sleep_time = 1 - (time.time() - s_time)
+        sleep_time = max(sleep_time, 0.1)
         time.sleep(sleep_time)
 
 if __name__ == '__main__':
