@@ -23,9 +23,9 @@ def control_wemo():
   dsc.start()
   try:
       while True:
+        d = queue.get()
         max_temp = dc.get_max_temp()
         min_temp = dc.get_min_temp()
-        d = queue.get()
         temp = d['temperature']
         if temp > max_temp:
           wc.switch_off()
