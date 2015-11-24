@@ -67,7 +67,6 @@ def process(ws, queue, sem):
         with sem:
             try:
                 data = json.dumps(queue.get_nowait())
-                print('post')
                 ws.send(data)
             except Queue.Empty:
                 gevent.sleep(1)
@@ -91,7 +90,7 @@ def css(path):
     return static_file(path, root='css')
 
 def main():
-    dsc = DynamoStreamClient(queue_list, old_items, util.temp_hist_arn)
+    dsc = DynamoStreamClient(queue_list, old_items, util.get_temp_hist_arn(force_prod=True))
     dsc.start()
     dsc_misc = DynamoStreamClient(queue_list, old_items, util.misc_arn)
     dsc_misc.start()

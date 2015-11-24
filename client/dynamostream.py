@@ -42,9 +42,7 @@ class DynamoStreamClient(threading.Thread):
                     msg['type'] = 'temp_hist'
                     msg['timestamp'] = ts
                     msg['temperature'] = temp
-                    print(str(ts) + ' ' + str(temp))
                 elif self.arn.find('miscellaneous') > -1:
-                    print(data)
                     key = data.get('any_key').values()[0]
                     if key == 'min_temp':
                         msg['type'] = key
